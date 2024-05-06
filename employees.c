@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//shalom github
+
 typedef struct employee_t
 {
     char name[128];
