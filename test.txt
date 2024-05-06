@@ -1,0 +1,3 @@
+Add Worker Paul 999999999 25.00 Chef 4
+Add Worker George 121212121 35.00 Waiter 2
+Add Worker Moses 131313131 30.00 Bartender 6
