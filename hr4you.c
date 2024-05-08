@@ -1,118 +1,106 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "prog2_ex1.h"
+//prog2
+//#define MAX_WORKERS 100
+//#define DAYS_IN_WEEK 7
+//#define MAX_LEN 256
+//#define MAX_WORKERS 100
+//#define HOURS_PER_SHIFT 8
 
-//Add Worker <name> <id> <hourly wage> <role> <number of shifts>
-typedef struct Worker{
-    char name[128];
-    int id;
+typedef struct worker_t {
+    char name[100];
+    long int id;
     double hour_wage;
-    worker_role role; //[6] enum
-}Worker;
+    char role[100]; //change later to enum with prog2
+    int number_of_shifts;
+} worker;
 
-// void add_worker(Worker **worker_arr,int size,char *name_w ,int id_w ,double hour_wage_w ,worker_role role_w){
-//     printf("f1");
-//     strcpy(worker_arr[size]->name, name_w);
-//     printf("f1");
-//     worker_arr[size]->id = id_w;
-//     worker_arr[size]->hour_wage = hour_wage_w;
-//     worker_arr[size]->role = role_w;
+/*terminal
+     end command
+    ./new_hr4 < test1 >! test1
 
-// }
-void add_worker(Worker *worker_arr,int size,char *name_w ,int id_w ,double hour_wage_w ,worker_role role_w){
-    strcpy(worker_arr[size].name, name_w);
-    worker_arr[size].id = id_w;
-    worker_arr[size].hour_wage = hour_wage_w;
-    worker_arr[size].role = role_w;
+     for testing
+    ./new_hr4 -i< test1
+*/
 
+void error(const char *msg){
+    printf("%s\n",msg);
+    exit(1);
 }
 
-int main(){
-    Worker arr[MAX_WORKERS];
-    int size = 0;
-    
-    int i = 0;
-
-    char name_w[128] ;
-    int id_w ;
-    double hour_wage_w ;
-    worker_role role_w;
-
-    char str1[128], str2[128], str3[128],str4[128], str5[128],str6[128],str7[128];
-
-    FILE * fp;
-    FILE * fpline;
-    char * line = NULL;
-    size_t len = 0;
-    ssize_t read;
-
-    fp = fopen("test.txt", "r");
-    if (fp == NULL)
-        exit(EXIT_FAILURE);
-
-    char *token;
-    const char s[2] = " ";
-
-    while ((read = getline(&line, &len, fp)) != -1) {
-        // printf("Retrieved line of length %zu:\n", read); // for test
-        // printf("%s", line);
-
-    /* get the first token */
-    token = strtok(line, s);
-    //char *temp = token;
-    
-    /* walk through other tokens */
-    while( token != NULL ) {
-        if(i == 0)
-            strcpy(str1,token);
-        if(i == 1)
-            strcpy(str2,token);
-        if(i == 2)
-            strcpy(str3,token);
-        if(i == 3)
-            strcpy(str4,token);
-        if(i == 4)
-            strcpy(str5,token);
-        if(i == 5)
-            strcpy(str6,token);
-        if(i == 6)
-            strcpy(str7,token);
-                
-            printf( "*%s\n", token);
-            token = strtok(NULL, s);
-            i++;
+void replaceSpaces(char *str) {
+    int i, j;
+    for (i = 0, j = 0; str[i] != '\0'; i++) {
+        if (str[0] != ' ') {
+            str[j++] = str[i]; // Copy non-space characters
         }
-
-    if(strcmp(str1,"Add") == 0 && strcmp(str2,"Worker") == 0){
-        printf("success \n");   
-        strcpy(name_w,str3);
-        id_w = atoi(str4); //change str to int
-        hour_wage_w = atof(str5); //change str to double
-        if(strcmp(str6,"Chef") == 0)
-             role_w = 4 ;
-        add_worker(arr,size,name_w,id_w,hour_wage_w,role_w);
-        size++;
-        }
-    /*elif add shift strcmp str1 str2
-    add_shift(shift *work_arr,)
-    */
-        i = 0;
     }
-    printf("%s\n",arr[0].name); //test to see worker in side the array
-    printf("%s\n",arr[1].name);
-    printf("%s\n",arr[2].name);
+    str[j] = '\0'; // Add null terminator at the end of the modified string
+}
 
-    fclose(fp);
-    if (line)
-        free(line);
-    exit(EXIT_SUCCESS);
 
-    // add_worker(arr,size);
-    // size++;
+int main(int argc, char *argv[]){
 
+    worker wo_arr[MAX_WORKERS];
+    char line[MAX_LEN];
+    char err_msg[32];
+
+    FILE *input_file = stdin;  // Default to standard input
+    FILE *output_file = stdout; // Default to standard output
+
+     if (argc == 3) {
+        if (strcmp(argv[1], "-i") == 0) {
+            input_file = fopen(argv[2], "r");
+            //
+            if (!input_file) {
+                error("Error opening input file");
+            }
+        } else if (strcmp(argv[1], "-o") == 0) {
+            output_file = fopen(argv[2], "w");
+
+            if (!output_file) {
+                error("Error opening output file");
+            }
+        } else {
+            //scanf user
+            error("Invalid arguments");
+        }
+    } else if (argc != 1) {
+        //scanf user
+        error("Invalid number of arguments");
+    }
+
+    // while (scanf("%s",line) != EOF)
+    // {
+    //     printf("%s",line);
+    // }
+
+    // Read input data
+    while (fgets(line, sizeof(line), input_file) != NULL) {
+        if (line[0] == '#') {
+            continue;
+        }
+    replaceSpaces(line);
+
+    fprintf(output_file,"%s", line);
+
+ 
+//
+        
+//       
+    }
+
+    // Close files if necessary
+    if (input_file != stdin) {
+        fclose(input_file);
+    }
+    if (output_file != stdout) {
+        fclose(output_file);
+    }
+
+printf("\n");
 return 0;
 }
-/*
-/$ code .
-*/
