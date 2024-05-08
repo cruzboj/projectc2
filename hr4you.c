@@ -40,8 +40,81 @@ void replaceSpaces(char *str) {
     }
     str[j] = '\0'; // Add null terminator at the end of the modified string
 }
-void Add_worker(worker ){
+void Add_worker(char *token){
 
+}
+
+void control_pannel(char *line){
+   const char s[2] = " ";
+   char *token;
+  
+    char str1[128],   str2[128],   str3[128],   str4[128],  str5[128],  str6[128],  str7[128];
+    int i = 0;
+   /* get the first token */
+   token = strtok(line, s);
+   
+   /* walk through other tokens */
+   while(token != NULL ) {
+    if(i == 0)
+        strcpy(str1,token);
+    if(i == 1)
+        strcpy(str2,token);
+    if(i == 2)
+        strcpy(str3,token);
+    if(i == 3)
+        strcpy(str4,token);
+    if(i == 4)
+        strcpy(str5,token);
+    if(i == 5)
+        strcpy(str6,token);
+    if(i == 6)
+        strcpy(str7,token);
+        //printf("%s\n", token); //tester
+    
+      token = strtok(NULL, s);
+      i++;
+   }
+   
+    if(strcmp(str1,"Add") == 0 && strcmp(str2,"Worker") == 0){
+        //printf("*to function add_worker*\n");
+        printf("NAME : %s ",str3);
+        printf("ID : %s ",str4);
+        printf("Hour Wage : %s ",str5);
+        printf("Role : %s ",str6);
+        printf("Shift : %s \n",str7);
+
+    }
+    if(strcmp(str1,"Add") == 0 && strcmp(str2,"Shift") == 0){
+        //printf("*to function add_shift*\n");
+        printf("ID : %s ",str3);
+        printf("Day : %s ",str4);
+        printf("Shift : %s \n",str5);
+
+    }
+    if(strcmp(str1,"Remove") == 0 && strcmp(str2,"Worker") == 0){
+        //printf("*to function Remove_shift*\n");
+        printf("ID : %s\n",str3);
+
+    }
+    if(strcmp(str1,"Report") == 0 && strcmp(str2,"Worker") == 0){
+        //printf("*to function Report_Worker*\n");
+        printf("Role : %s\n",str3);
+
+
+    }
+    if(strcmp(str1,"Report") == 0 && strcmp(str2,"Shift") == 0){
+        //printf("*to function Report_shift*\n");
+        printf("ID : %s\n",str3);
+
+
+    }
+    if(strcmp(str1,"Report") == 0 && strcmp(str2,"Shift") == 0 && strcmp(str3,"Details") == 0) {
+        //printf("*to function Report_Shift_Details*\n");
+        printf("%s ",str3);
+        printf("%s ",str4);
+        printf("%s \n",str5);
+
+    }
 }
 
 int main(int argc, char *argv[]){
@@ -100,7 +173,8 @@ int main(int argc, char *argv[]){
         }
     //functions ==============================================================================
     replaceSpaces(line);
-    //Add_worker();
+    control_pannel(line);
+    //Add_worker(line);
     // Remove_Worker();
     // Add_Shift();
     // Report_Workers();
