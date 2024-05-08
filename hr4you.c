@@ -14,7 +14,7 @@ typedef struct worker_t {
     char name[100];
     long int id;
     double hour_wage;
-    char role[100]; //change later to enum with prog2
+    worker_role role; //[6] enum
     int number_of_shifts;
 } worker;
 
@@ -23,7 +23,7 @@ typedef struct worker_t {
     ./new_hr4 < test1 >! test1
 
      for testing
-    ./new_hr4 -i< test1
+    ./new_hr4 -i test1
 */
 
 void error(const char *msg){
@@ -40,7 +40,9 @@ void replaceSpaces(char *str) {
     }
     str[j] = '\0'; // Add null terminator at the end of the modified string
 }
+void Add_worker(worker ){
 
+}
 
 int main(int argc, char *argv[]){
 
@@ -50,23 +52,36 @@ int main(int argc, char *argv[]){
 
     FILE *input_file = stdin;  // Default to standard input
     FILE *output_file = stdout; // Default to standard output
-
-     if (argc == 3) {
-        if (strcmp(argv[1], "-i") == 0) {
-            input_file = fopen(argv[2], "r");
+   if(argc == 3 || argc == 5){
+    if (argc == 3) {
+        if (strcmp(argv[1], "-i") == 0) { 
+            input_file = fopen(argv[2], "r"); // ./new_hr4 -i test1.in
             //
             if (!input_file) {
                 error("Error opening input file");
             }
-        } else if (strcmp(argv[1], "-o") == 0) {
-            output_file = fopen(argv[2], "w");
-
-            if (!output_file) {
-                error("Error opening output file");
-            }
         } else {
             //scanf user
             error("Invalid arguments");
+        }
+    }
+    else if (argc == 5) {
+        if (strcmp(argv[1], "-i") == 0) { 
+            input_file = fopen(argv[2], "r"); // ./new_hr4 -i test1.in
+            //
+                if (!input_file) {
+                    error("Error opening input file");
+                }
+            }if (strcmp(argv[3], "-o") == 0){ // ./new_hr4 -i test1.in -o test1.out
+                output_file = fopen(argv[4], "w");
+                //
+                if (!output_file || !input_file) {
+                    error("Error opening output file");
+                }
+            } else {
+                //scanf user
+                error("Invalid arguments");
+            }
         }
     } else if (argc != 1) {
         //scanf user
@@ -83,8 +98,15 @@ int main(int argc, char *argv[]){
         if (line[0] == '#') {
             continue;
         }
+    //functions ==============================================================================
     replaceSpaces(line);
-
+    //Add_worker();
+    // Remove_Worker();
+    // Add_Shift();
+    // Report_Workers();
+    // Report_Shifts();
+    // Report_Shift_Details();
+    
     fprintf(output_file,"%s", line);
 
  
