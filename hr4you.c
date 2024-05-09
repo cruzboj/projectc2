@@ -31,17 +31,21 @@ void error(const char *msg){
     exit(1);
 }
 
+/* //maybe we dont need this
 void replaceSpaces(char *str) {
     int i, j;
     for (i = 0, j = 0; str[i] != '\0'; i++) {
-        if (str[0] != ' ') {
+        if (str[i] != ' ') {
             str[j++] = str[i]; // Copy non-space characters
         }
     }
     str[j] = '\0'; // Add null terminator at the end of the modified string
 }
-void Add_worker(char *token){
-
+*/
+//Add Worker <name> <id> <hourly wage> <role> <number of shifts>
+void Add_worker(worker *wo_arr,int wo_num,char *name,int id,double hw,worker_role role,int shift){
+    strcpy(wo_arr[wo_num].name, name);
+    wo_arr[wo_num].id = id;
 }
 
 void control_pannel(char *line){
@@ -172,7 +176,7 @@ int main(int argc, char *argv[]){
             continue;
         }
     //functions ==============================================================================
-    replaceSpaces(line);
+    //replaceSpaces(line); //maybe we dont need it
     control_pannel(line);
     //Add_worker(line);
     // Remove_Worker();
@@ -181,7 +185,8 @@ int main(int argc, char *argv[]){
     // Report_Shifts();
     // Report_Shift_Details();
     
-    fprintf(output_file,"%s", line);
+    //for now its just a tester.
+    //fprintf(output_file,"%s", line); //what will come in the output.
 
  
 //
