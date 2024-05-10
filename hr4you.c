@@ -12,7 +12,7 @@
 
 typedef struct worker_t {
     char name[100];
-    long int id;
+    int id;
     double hour_wage;
     worker_role role; //[6] enum
     int number_of_shifts;
@@ -104,8 +104,6 @@ void Add_worker(worker *wo_arr,int wo_num,char *name,int id,float hw,int role,in
     wo_arr[wo_num].role=role;
     wo_arr[wo_num].number_of_shifts=shift;
 //printf("%s\n",wo_arr[0].name);
-    
-     wo_num++;
     
 
 }
@@ -250,6 +248,7 @@ int main(int argc, char *argv[]){
     //functions ==============================================================================
     //replaceSpaces(line); //maybe we dont need it
     control_pannel(line,wo_arr,wo_num);
+    wo_num++;
     //Add_worker(line);
     // Remove_Worker();
     // Add_Shift();
@@ -273,7 +272,11 @@ int main(int argc, char *argv[]){
     if (output_file != stdout) {
         fclose(output_file);
     }
-printf("%s\n",wo_arr[4].name);
+printf("%s\n",wo_arr[3].name);
+printf("%d\n",wo_arr[3].id);
+printf("%f\n",wo_arr[3].hour_wage);
+//printf("%s\n",wo_arr[3].role);
+printf("%d\n",wo_arr[3].number_of_shifts);
 printf("%d",wo_num);
 
 printf("\n");
