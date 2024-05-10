@@ -4,7 +4,7 @@
 
 #include "prog2_ex1.h"
 //prog2
-//#define MAX_WORKERS 100
+#define MAX_WORKERS 100
 //#define DAYS_IN_WEEK 7
 //#define MAX_LEN 256
 //#define MAX_WORKERS 100
@@ -43,12 +43,74 @@ void replaceSpaces(char *str) {
 }
 */
 //Add Worker <name> <id> <hourly wage> <role> <number of shifts>
-void Add_worker(worker *wo_arr,int wo_num,char *name,int id,double hw,worker_role role,int shift){
+int sort_role(char *role){
+    if(strcmp(role,"Bartender")==0){
+      return  0;
+    }
+
+    if(strcmp(role,"Waiter")==0){
+      return  1;
+    }
+    if(strcmp(role,"Manager")==0){
+      return  2;
+    }
+    if(strcmp(role,"Cashier")==0){
+       return 3;
+    }
+    if(strcmp(role,"Chef")==0){
+       return 4;
+    }
+    if(strcmp(role,"Dishwasher")==0){
+       return 5;
+    }
+}
+//char* addWorker(char* name, long int id, double hour_wage, worker_role role, int numShifts)
+void Add_worker(worker *wo_arr,int wo_num,char *name,int id,float hw,int role,int shift) {
+    
+    // Check if the number of workers exceeds the maximum limit
+    // if (numWorkers >= MAX_WORKERS) {
+    //     printf ("Error: Maximum number of workers reached");
+    // }
+
+    // // Check if the ID is valid
+    // if (id <= 0) {
+    //     printf ("Error: Invalid worker ID");
+    // }
+
+    // // Check if the hourly wage is valid
+    // if (hw <= 0) {
+    //     printf ("Error: Invalid hourly wage");
+    // }
+
+    
+    // if (role <= 0 || role >= 5) {
+    //     printf ("Error: Invalid worker role");
+    // }
+
+    // // Check if the number of shifts is valid
+    // if (shift < 0 || shift > 7) {
+    //     printf ("Error: Invalid number of shifts");
+    // }
+
+    // // Check if the worker already exists
+    // for (int i = 0; i < wo_num; i++) {
+    //     if (wo_arr[i].id == id) {
+    //         printf ("Error: Worker with the same ID already exists");
+    //     }
+    // }
     strcpy(wo_arr[wo_num].name, name);
-    wo_arr[wo_num].id = id;
+    wo_arr[wo_num].id=id;
+    wo_arr[wo_num].hour_wage=hw;
+    wo_arr[wo_num].role=role;
+    wo_arr[wo_num].number_of_shifts=shift;
+//printf("%s\n",wo_arr[0].name);
+    
+     wo_num++;
+    
+
 }
 
-void control_pannel(char *line){
+void control_pannel(char *line,worker *wo_arr,int wo_num){
    const char s[2] = " ";
    char *token;
   
@@ -81,51 +143,61 @@ void control_pannel(char *line){
    
     if(strcmp(str1,"Add") == 0 && strcmp(str2,"Worker") == 0){
         //printf("*to function add_worker*\n");
-        printf("NAME : %s ",str3);
-        printf("ID : %s ",str4);
-        printf("Hour Wage : %s ",str5);
-        printf("Role : %s ",str6);
-        printf("Shift : %s \n",str7);
+        // printf("NAME : %s ",str3);
+        // printf("ID : %s ",str4);
+        // printf("Hour Wage : %s ",str5);
+        // printf("Role : %s ",str6);
+        // printf("Shift : %s \n",str7);
+        
+        int id = atoi(str4);
+        float hw = atof(str5);
+        int shift = atoi(str7);
+        int role=sort_role(str6);
+        
 
+        Add_worker(wo_arr,wo_num,str3,id,hw,role,shift);
     }
     if(strcmp(str1,"Add") == 0 && strcmp(str2,"Shift") == 0){
         //printf("*to function add_shift*\n");
-        printf("ID : %s ",str3);
-        printf("Day : %s ",str4);
-        printf("Shift : %s \n",str5);
+        // printf("ID : %s ",str3);
+        // printf("Day : %s ",str4);
+        // printf("Shift : %s \n",str5);
 
     }
     if(strcmp(str1,"Remove") == 0 && strcmp(str2,"Worker") == 0){
         //printf("*to function Remove_shift*\n");
-        printf("ID : %s\n",str3);
+        //printf("ID : %s\n",str3);
 
     }
     if(strcmp(str1,"Report") == 0 && strcmp(str2,"Worker") == 0){
         //printf("*to function Report_Worker*\n");
-        printf("Role : %s\n",str3);
+        //printf("Role : %s\n",str3);
 
 
     }
     if(strcmp(str1,"Report") == 0 && strcmp(str2,"Shift") == 0){
         //printf("*to function Report_shift*\n");
-        printf("ID : %s\n",str3);
+        //printf("ID : %s\n",str3);
 
 
     }
     if(strcmp(str1,"Report") == 0 && strcmp(str2,"Shift") == 0 && strcmp(str3,"Details") == 0) {
         //printf("*to function Report_Shift_Details*\n");
-        printf("%s ",str3);
-        printf("%s ",str4);
-        printf("%s \n",str5);
+        // printf("%s ",str3);
+        // printf("%s ",str4);
+        // printf("%s \n",str5);
 
     }
 }
+
 
 int main(int argc, char *argv[]){
 
     worker wo_arr[MAX_WORKERS];
     char line[MAX_LEN];
     char err_msg[32];
+    int wo_num=0;
+    
 
     FILE *input_file = stdin;  // Default to standard input
     FILE *output_file = stdout; // Default to standard output
@@ -177,7 +249,7 @@ int main(int argc, char *argv[]){
         }
     //functions ==============================================================================
     //replaceSpaces(line); //maybe we dont need it
-    control_pannel(line);
+    control_pannel(line,wo_arr,wo_num);
     //Add_worker(line);
     // Remove_Worker();
     // Add_Shift();
@@ -201,6 +273,8 @@ int main(int argc, char *argv[]){
     if (output_file != stdout) {
         fclose(output_file);
     }
+printf("%s\n",wo_arr[4].name);
+printf("%d",wo_num);
 
 printf("\n");
 return 0;
