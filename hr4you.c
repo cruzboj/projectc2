@@ -326,10 +326,7 @@ int main(int argc, char *argv[]){
 
     // Read input data
     while (fgets(line, sizeof(line), input_file) != NULL) {
-        if (line[0] == '#') {
-            continue;
-        }
-        if (line[0] == '\n') {
+        if (line[0] == '#'||line[0] == '\n'||line[0] == '\r') {
             continue;
         }
     //functions ==============================================================================
