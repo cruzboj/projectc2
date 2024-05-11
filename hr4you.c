@@ -73,7 +73,7 @@ void prog2_report_error_message(hr_result result){
             printf("Unknown choice\n");
             break;
     }
-    exit(1);
+    //exit(1);
 }
 
 /*terminal
@@ -153,36 +153,36 @@ char *print_role(int role){
 void Add_worker(worker *wo_arr,int wo_num,char *name,int id,float hw,int role,int shift) {
     
     // Check if the number of workers exceeds the maximum limit
-    // if (numWorkers >= MAX_WORKERS) {
-    //     printf ("Error: Maximum number of workers reached");
-    // }
+    if (wo_num > MAX_WORKERS) {
+        prog2_report_error_message(WORKERS_OVERFLOW);
+    }
 
-    // // Check if the ID is valid
-    // if (id <= 0) {
-    //     printf ("Error: Invalid worker ID");
-    // }
-
-    // // Check if the hourly wage is valid
-    // if (hw <= 0) {
-    //     printf ("Error: Invalid hourly wage");
-    // }
-
+    // Check if the ID is valid
+    if (id <0 || id>1000000000 || id/100000000 == 0) {
+        prog2_report_error_message(INVALID_WORKER_ID);
+    }
     
-    // if (role <= 0 || role >= 5) {
-    //     printf ("Error: Invalid worker role");
-    // }
+    // Check if the hourly wage is valid
+    if (hw < 0 || hw > 99.99 ) {
+        prog2_report_error_message(INVALID_WAGE);
+    }
+
+    if (role < 0 || role > 5) {
+        prog2_report_error_message(INVALID_ROLE);
+    }
 
     // // Check if the number of shifts is valid
-    // if (shift < 0 || shift > 7) {
-    //     printf ("Error: Invalid number of shifts");
-    // }
+    if (shift < 0 || shift > 7) {
+        prog2_report_error_message(INVALID_NUM_OF_SHIFTS);
+    }
 
-    // // Check if the worker already exists
-    // for (int i = 0; i < wo_num; i++) {
-    //     if (wo_arr[i].id == id) {
-    //         printf ("Error: Worker with the same ID already exists");
-    //     }
-    // }
+    //Check if the worker already exists
+    for (int i = 0; i < wo_num; i++) {
+      if (wo_arr[i].id == id) {
+        prog2_report_error_message(WORKER_ALREADY_EXISTS);
+        }
+    }
+
     strcpy(wo_arr[wo_num].name, name);
     wo_arr[wo_num].id=id;
     wo_arr[wo_num].hour_wage=hw;
@@ -280,7 +280,6 @@ int main(int argc, char *argv[]){
     char line[MAX_LEN];
     char err_msg[32];
     int wo_num=0;
-    
 
     FILE *input_file = stdin;  // Default to standard input
     FILE *output_file = stdout; // Default to standard output
@@ -330,6 +329,9 @@ int main(int argc, char *argv[]){
         if (line[0] == '#') {
             continue;
         }
+        if (line[0] == '\n') {
+            continue;
+        }
     //functions ==============================================================================
     //replaceSpaces(line); //maybe we dont need it
     control_pannel(line,wo_arr,wo_num);
@@ -357,11 +359,11 @@ int main(int argc, char *argv[]){
     if (output_file != stdout) {
         fclose(output_file);
     }
-printf("name :%s\n",wo_arr[3].name);
-printf("id :%d\n",wo_arr[3].id);
-printf("hour wage :%f\n",wo_arr[3].hour_wage);
-printf("role :%s\n",print_role(wo_arr[3].role));
-printf("number of shifts :%d\n",wo_arr[3].number_of_shifts);
+printf("name :%s\n",wo_arr[0].name);
+printf("id :%d\n",wo_arr[0].id);
+printf("hour wage :%f\n",wo_arr[0].hour_wage);
+printf("role :%s\n",print_role(wo_arr[0].role));
+printf("number of shifts :%d\n",wo_arr[0].number_of_shifts);
 //printf("%d",wo_num);
 
 printf("\n");
