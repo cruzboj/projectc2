@@ -18,8 +18,8 @@ typedef struct worker_t {
     int number_of_shifts;
 } worker;
 
-void error(hr_result error){
-    switch(error) {
+void prog2_report_error_message(hr_result result){
+    switch(result) {
         case SUCCESS:
             printf("SUCCESS\n");
             break;
@@ -258,11 +258,11 @@ int main(int argc, char *argv[]){
             input_file = fopen(argv[2], "r"); // ./new_hr4 -i test1.in
             //
             if (!input_file) {
-                error(CANNOT_OPEN_FILE);
+                prog2_report_error_message(CANNOT_OPEN_FILE);
             }
         } else {
             //scanf user
-            error(INVALID_ARGUMENTS);
+            prog2_report_error_message(INVALID_ARGUMENTS);
         }
     }
     else if (argc == 5) {
@@ -270,22 +270,22 @@ int main(int argc, char *argv[]){
             input_file = fopen(argv[2], "r"); // ./new_hr4 -i test1.in
             //
                 if (!input_file) {
-                    error(CANNOT_OPEN_FILE);
+                    prog2_report_error_message(CANNOT_OPEN_FILE);
                 }
             }if (strcmp(argv[3], "-o") == 0){ // ./new_hr4 -i test1.in -o test1.out
                 output_file = fopen(argv[4], "w");
                 //
                 if (!output_file || !input_file) {
-                    error(CANNOT_OPEN_FILE);
+                    prog2_report_error_message(CANNOT_OPEN_FILE);
                 }
             } else {
                 //scanf user
-                error(INVALID_ARGUMENTS);
+                prog2_report_error_message(INVALID_ARGUMENTS);
             }
         }
     } else if (argc != 1) {
         //scanf user
-        error(INVALID_ARGUMENTS);
+        prog2_report_error_message(INVALID_ARGUMENTS);
     }
 
     // while (scanf("%s",line) != EOF)
