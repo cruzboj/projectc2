@@ -19,6 +19,7 @@ typedef struct worker_t {
 } worker;
 
 void prog2_report_error_message(hr_result result){
+    //we need to change the printf() to fprintf() but not now.
     switch(result) {
         case SUCCESS:
             printf("SUCCESS\n");
@@ -73,7 +74,6 @@ void prog2_report_error_message(hr_result result){
             break;
     }
     exit(1);
-
 }
 
 /*terminal
@@ -95,26 +95,58 @@ void replaceSpaces(char *str) {
     str[j] = '\0'; // Add null terminator at the end of the modified string
 }
 */
-//Add Worker <name> <id> <hourly wage> <role> <number of shifts>
+
 int sort_role(char *role){
     if(strcmp(role,"Bartender")==0){
       return  0;
     }
-
-    if(strcmp(role,"Waiter")==0){
+    else if(strcmp(role,"Waiter")==0){
       return  1;
     }
-    if(strcmp(role,"Manager")==0){
+    else if(strcmp(role,"Manager")==0){
       return  2;
     }
-    if(strcmp(role,"Cashier")==0){
+    else if(strcmp(role,"Cashier")==0){
        return 3;
     }
-    if(strcmp(role,"Chef")==0){
+    else if(strcmp(role,"Chef")==0){
        return 4;
     }
-    if(strcmp(role,"Dishwasher")==0){
+    else if(strcmp(role,"Dishwasher")==0){
        return 5;
+    }
+    else
+        prog2_report_error_message(INVALID_ROLE);
+}
+
+char *print_role(int role){
+    switch(role){
+        case 0:
+            return "BARTENDER";
+            break;
+        
+        case 1:
+            return "WAITER";
+            break;
+
+        case 2:
+            return "MANAGER";
+            break;
+
+        case 3:
+            return "CASHIER";
+            break;
+
+        case 4:
+            return "CHEF";
+            break;
+
+        case 5:
+            return "DISHWASHER";
+            break;
+
+        default:
+            prog2_report_error_message(INVALID_ROLE);
     }
 }
 //char* addWorker(char* name, long int id, double hour_wage, worker_role role, int numShifts)
@@ -203,7 +235,7 @@ void control_pannel(char *line,worker *wo_arr,int wo_num){
         int id = atoi(str4);
         float hw = atof(str5);
         int shift = atoi(str7);
-        int role=sort_role(str6);
+        int role = sort_role(str6);
         
 
         Add_worker(wo_arr,wo_num,str3,id,hw,role,shift);
@@ -325,11 +357,11 @@ int main(int argc, char *argv[]){
     if (output_file != stdout) {
         fclose(output_file);
     }
-printf("%s\n",wo_arr[3].name);
-printf("%d\n",wo_arr[3].id);
-printf("%f\n",wo_arr[3].hour_wage);
-//printf("%s\n",wo_arr[3].role);
-printf("%d\n",wo_arr[3].number_of_shifts);
+printf("name :%s\n",wo_arr[3].name);
+printf("id :%d\n",wo_arr[3].id);
+printf("hour wage :%f\n",wo_arr[3].hour_wage);
+printf("role :%s\n",print_role(wo_arr[3].role));
+printf("number of shifts :%d\n",wo_arr[3].number_of_shifts);
 //printf("%d",wo_num);
 
 printf("\n");
