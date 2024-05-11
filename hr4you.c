@@ -18,6 +18,64 @@ typedef struct worker_t {
     int number_of_shifts;
 } worker;
 
+void error(hr_result error){
+    switch(error) {
+        case SUCCESS:
+            printf("SUCCESS\n");
+            break;
+        case INVALID_ARGUMENTS:
+            printf("INVALID_ARGUMENTS\n");
+            break;
+        case CANNOT_OPEN_FILE:
+            printf("CANNOT_OPEN_FILE\n");
+            break;
+        case WORKERS_OVERFLOW:
+            printf("WORKERS_OVERFLOW\n");
+            break;
+        case INVALID_WORKER_ID:
+            printf("INVALID_WORKER_ID\n");
+            break;
+        case INVALID_WAGE:
+            printf("INVALID_WAGE\n");
+            break;
+        case INVALID_ROLE:
+            printf("INVALID_ROLE\n");
+            break;
+        case INVALID_NUM_OF_SHIFTS:
+            printf("INVALID_NUM_OF_SHIFTS\n");
+            break;
+        case WORKER_ALREADY_EXISTS:
+            printf("WORKER_ALREADY_EXISTS\n");
+            break;
+        case INVALID_SHIFT_DAY:
+            printf("INVALID_SHIFT_DAY\n");
+            break;
+        case INVALID_SHIFT_TYPE:
+            printf("INVALID_SHIFT_TYPE\n");
+            break;
+        case WORKER_DOESNT_EXIST:
+            printf("WORKER_DOESNT_EXIST\n");
+            break;
+        case SHIFTS_OVERFLOW:
+            printf("SHIFTS_OVERFLOW\n");
+            break;
+        case SHIFT_ALREADY_EXISTS:
+            printf("SHIFT_ALREADY_EXISTS\n");
+            break;
+        case NO_WORKERS:
+            printf("NO_WORKERS\n");
+            break;
+        case NO_SHIFTS:
+            printf("NO_SHIFTS\n");
+            break;
+        default:
+            printf("Unknown choice\n");
+            break;
+    }
+    exit(1);
+
+}
+
 /*terminal
      end command
     ./new_hr4 < test1 >! test1
@@ -25,11 +83,6 @@ typedef struct worker_t {
      for testing
     ./new_hr4 -i test1
 */
-
-void error(const char *msg){
-    printf("%s\n",msg);
-    exit(1);
-}
 
 /* //maybe we dont need this
 void replaceSpaces(char *str) {
@@ -205,11 +258,11 @@ int main(int argc, char *argv[]){
             input_file = fopen(argv[2], "r"); // ./new_hr4 -i test1.in
             //
             if (!input_file) {
-                error("Error opening input file");
+                error(CANNOT_OPEN_FILE);
             }
         } else {
             //scanf user
-            error("Invalid arguments");
+            error(INVALID_ARGUMENTS);
         }
     }
     else if (argc == 5) {
@@ -217,22 +270,22 @@ int main(int argc, char *argv[]){
             input_file = fopen(argv[2], "r"); // ./new_hr4 -i test1.in
             //
                 if (!input_file) {
-                    error("Error opening input file");
+                    error(CANNOT_OPEN_FILE);
                 }
             }if (strcmp(argv[3], "-o") == 0){ // ./new_hr4 -i test1.in -o test1.out
                 output_file = fopen(argv[4], "w");
                 //
                 if (!output_file || !input_file) {
-                    error("Error opening output file");
+                    error(CANNOT_OPEN_FILE);
                 }
             } else {
                 //scanf user
-                error("Invalid arguments");
+                error(INVALID_ARGUMENTS);
             }
         }
     } else if (argc != 1) {
         //scanf user
-        error("Invalid number of arguments");
+        error(INVALID_ARGUMENTS);
     }
 
     // while (scanf("%s",line) != EOF)
@@ -277,7 +330,7 @@ printf("%d\n",wo_arr[3].id);
 printf("%f\n",wo_arr[3].hour_wage);
 //printf("%s\n",wo_arr[3].role);
 printf("%d\n",wo_arr[3].number_of_shifts);
-printf("%d",wo_num);
+//printf("%d",wo_num);
 
 printf("\n");
 return 0;
