@@ -4,7 +4,6 @@
 
 #include "prog2_ex1.h"
 //prog2
-#define MAX_WORKERS 100
 //#define DAYS_IN_WEEK 7
 //#define MAX_LEN 256
 //#define MAX_WORKERS 100
@@ -16,6 +15,8 @@ typedef struct worker_t {
     double hour_wage;
     worker_role role; //[6] enum
     int number_of_shifts;
+    shift_day shift_week;
+    shift_type shift_time;
 } worker;
 
 void prog2_report_error_message(hr_result result){
@@ -76,25 +77,29 @@ void prog2_report_error_message(hr_result result){
     //exit(1);
 }
 
-/*terminal
-     end command
-    ./new_hr4 < test1 >! test1
+//REMOVE WORKER (wo_arr,*wo_num,id);
+void Remove_worker(worker *wo_arr, int wo_num, int id) {
+    if (id < 0 || id > 1000000000 || id / 100000000 == 0) {
+        prog2_report_error_message(INVALID_WORKER_ID);
+    }
 
-     for testing
-    ./new_hr4 -i test1
-*/
-
-/* //maybe we dont need this
-void replaceSpaces(char *str) {
-    int i, j;
-    for (i = 0, j = 0; str[i] != '\0'; i++) {
-        if (str[i] != ' ') {
-            str[j++] = str[i]; // Copy non-space characters
+    int found = 0;
+    for (int i = 0; i < wo_num; i++) {
+        if (wo_arr[i].id == id) {
+            found = 1;
+            // Shift elements to the left to remove worker
+            for (int j = i; j < wo_num - 1; j++) {
+                wo_arr[j] = wo_arr[j + 1];
+            }
+            (wo_num)--; // Decrease the number of workers
+            break; // Exit loop once worker is removed
         }
     }
-    str[j] = '\0'; // Add null terminator at the end of the modified string
+
+    if (!found) {
+        prog2_report_error_message(WORKER_DOESNT_EXIST);
+    }
 }
-*/
 
 int sort_role(char *role){
     if(strcmp(role,"Bartender")==0){
@@ -149,7 +154,8 @@ char *print_role(int role){
             prog2_report_error_message(INVALID_ROLE);
     }
 }
-//char* addWorker(char* name, long int id, double hour_wage, worker_role role, int numShifts)
+
+//ADD WORKER (wo_arr,*wo_num,str3,id,hw,role,shift);
 void Add_worker(worker *wo_arr,int wo_num,char *name,int id,float hw,int role,int shift) {
     
     // Check if the number of workers exceeds the maximum limit
@@ -193,7 +199,7 @@ void Add_worker(worker *wo_arr,int wo_num,char *name,int id,float hw,int role,in
 
 }
 
-void control_pannel(char *line,worker *wo_arr,int wo_num){
+void control_pannel(char *line,worker *wo_arr,int *wo_num){
    const char s[2] = " ";
    char *token;
   
@@ -224,7 +230,7 @@ void control_pannel(char *line,worker *wo_arr,int wo_num){
       i++;
    }
    
-    if(strcmp(str1,"Add") == 0 && strcmp(str2,"Worker") == 0){
+    if(strcmp(str1,"Add") == 0 && strcmp(str2,"Worker") == 0){      // [x]
         //printf("*to function add_worker*\n");
         // printf("NAME : %s ",str3);
         // printf("ID : %s ",str4);
@@ -237,8 +243,8 @@ void control_pannel(char *line,worker *wo_arr,int wo_num){
         int shift = atoi(str7);
         int role = sort_role(str6);
         
-
-        Add_worker(wo_arr,wo_num,str3,id,hw,role,shift);
+        Add_worker(wo_arr,*wo_num,str3,id,hw,role,shift);
+        *wo_num = *wo_num+1 ;
     }
     if(strcmp(str1,"Add") == 0 && strcmp(str2,"Shift") == 0){
         //printf("*to function add_shift*\n");
@@ -247,9 +253,13 @@ void control_pannel(char *line,worker *wo_arr,int wo_num){
         // printf("Shift : %s \n",str5);
 
     }
-    if(strcmp(str1,"Remove") == 0 && strcmp(str2,"Worker") == 0){
+    if(strcmp(str1,"Remove") == 0 && strcmp(str2,"Worker") == 0){   // [x]
         //printf("*to function Remove_shift*\n");
         //printf("ID : %s\n",str3);
+
+        int id = atoi(str3);
+        Remove_worker(wo_arr,*wo_num,id);
+        *wo_num = *wo_num-1 ;
 
     }
     if(strcmp(str1,"Report") == 0 && strcmp(str2,"Worker") == 0){
@@ -273,13 +283,12 @@ void control_pannel(char *line,worker *wo_arr,int wo_num){
     }
 }
 
-
 int main(int argc, char *argv[]){
 
     worker wo_arr[MAX_WORKERS];
     char line[MAX_LEN];
     char err_msg[32];
-    int wo_num=0;
+    int wo_num = 0;
 
     FILE *input_file = stdin;  // Default to standard input
     FILE *output_file = stdout; // Default to standard output
@@ -330,39 +339,51 @@ int main(int argc, char *argv[]){
             continue;
         }
     //functions ==============================================================================
-    //replaceSpaces(line); //maybe we dont need it
-    control_pannel(line,wo_arr,wo_num);
-    wo_num++;
-    //Add_worker(line);
-    // Remove_Worker();
-    // Add_Shift();
-    // Report_Workers();
-    // Report_Shifts();
-    // Report_Shift_Details();
-    
+    control_pannel(line,wo_arr,&wo_num);
+
     //for now its just a tester.
     //fprintf(output_file,"%s", line); //what will come in the output.
-
- 
-//
-        
-//       
     }
 
     // Close files if necessary
-    if (input_file != stdin) {
-        fclose(input_file);
-    }
-    if (output_file != stdout) {
-        fclose(output_file);
-    }
-printf("name :%s\n",wo_arr[0].name);
-printf("id :%d\n",wo_arr[0].id);
-printf("hour wage :%f\n",wo_arr[0].hour_wage);
-printf("role :%s\n",print_role(wo_arr[0].role));
-printf("number of shifts :%d\n",wo_arr[0].number_of_shifts);
-//printf("%d",wo_num);
+        if (input_file != stdin) {
+            fclose(input_file);
+        }
+        if (output_file != stdout) {
+            // fclose(output_file);
+        }
 
-printf("\n");
-return 0;
+//print test
+
+    // printf("name :%s\n",wo_arr[0].name);
+    // printf("id :%d\n",wo_arr[0].id);
+    // printf("hour wage :%f\n",wo_arr[0].hour_wage);
+    // printf("role :%s\n",print_role(wo_arr[0].role));
+    // printf("number of shifts :%d\n",wo_arr[0].number_of_shifts);
+    //printf("\n");
+
+
+    // printf("%d",wo_num);
+
+    for(int i = 0 ; i < wo_num ; i++){
+        printf("name:\t\t%s\n",wo_arr[i].name);
+        printf("id:\t\t%d\n",wo_arr[i].id);
+        printf("hour wage:\t%f\n",wo_arr[i].hour_wage);
+        printf("role:\t\t%s\n",print_role(wo_arr[i].role));
+        printf("number of shifts:\t%d\n",wo_arr[i].number_of_shifts);
+        printf("\n");
+    }
+
+
+
+
+    return 0;
 }
+
+/*terminal
+     end command
+    ./new_hr4 < test1 >! test1
+
+     for testing
+    ./new_hr4 -i test1
+*/
